@@ -4,8 +4,8 @@
 -- tbl_menu 테이블에서 이름, 가격, 판매상태를 조회해줘 
 -- 근데 판매상태가 Y 인 친구들만 조회를 해줘 
 select
-   menu_name,
-    menu_price,
+    menu_name,
+	menu_price,
     orderable_status
 from
    tbl_menu
