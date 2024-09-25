@@ -1,4 +1,5 @@
 use employee;
+
 -- DROP TABLE `EMPLOYEE`;
 -- DROP TABLE `DEPARTMENT`;
 -- DROP TABLE `JOB`;
