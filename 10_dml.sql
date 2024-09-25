@@ -55,11 +55,35 @@ select * from tbl_menu;
 -- 문제 1. 메뉴의 이름이 파인애플탕인 메뉴의 카테고리코드를 6으로 수정하시오.
 -- where menu_name = '파인애플탕' x
 -- where menu_code 를 통해 파인애플탕 추론하기
-update menu_code set 
+update tbl_menu set category_code = 6 where menu_code = (select menu_code from tbl_menu where menu_name = '파인애플'); 
+-- 위에꺼는 1093 에러가떳다 밑에는 문제해결
+update tbl_menu set category_code = 6 where menu_code = (select cte.menu_code from (select menu_code from tbl_menu where menu_name = '파인애플탕')cte);
 
+-- delete
+-- 테이블의 행을 삭제하는 구문이다.
+-- 테이블의 행의 갯수가 줄어든다.
 
+select * from tbl_menu;
+-- limit
+delete from tbl_menu order by menu_price asc limit 2;
 
+select * from tbl_menu;
 
+-- where 사용으로 단일 행 삭제
+delete from tbl_menu where menu_code = 22;
 
+select * from tbl_menu;
+
+delete from tbl_menu;
+
+select * from tbl_menu;
+
+-- replace
+-- insert 시 primary key 또는 unique key 가 충돌이 발생한다면
+-- replace 를 통해 중복 된 데이터를 덮어쓸 수 있다.
+
+insert into tbl_menu values(15,'소주', 6000, 10, 'Y');
+replace into tbl_menu values(15,'소주', 7000, 10, 'Y');
+select * from tbl_menu;
 
 
