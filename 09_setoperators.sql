@@ -26,3 +26,10 @@ select * from tbl_menu where menu_price < 9000;
 select * from tbl_menu a join (select * from tbl_menu where menu_price < 9000) b on (a.menu_code = b.menu_code) where a.category_code = 10;
 -- in 연산자 사용법
 select * from tbl_menu where category_code = 10 and menu_code in (select menu_code from tbl_menu where menu_price < 9000);
+-- MINUS
+-- 첫 번째 select 문의 결과에서 두 번째 select 문의 결과가 포함 된
+-- 레코드를 제외한 레코드를 반환하는 연산자 = 차집합
+-- 하지만, MySQL 에서는 MINUS 를 지원하지 않는다.
+-- 그래도 우리는 left join 을 이용해서 구현할 수 있다.
+select * from tbl_menu a left join (select * from tbl_menu where menu_price < 9000) b on (a.menu_code = b.menu_code)
+where a.category_code = 10 and b.menu_code is null;
