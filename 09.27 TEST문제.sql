@@ -165,14 +165,100 @@ tb_professor;
 -- SUBSTRING(PROFESSOR_SSN, 1, 6)), '%Y%m%d')) / 365) as 나이
 select
 STUDENT_NO,
-STUDENT_NAME,
-FLOOR(DATEDIFF(CURDATE(), STR_TO_DATE(CONCAT('19',
-SUBSTRING(STUDENT_SSN, 1, 6)), '%Y%m%d')) / 365) as 나이
+STUDENT_NAME
 from
 tb_student
 where
-FLOOR(DATEDIFF(CURDATE(), STR_TO_DATE(CONCAT('19',
-SUBSTRING(STUDENT_SSN, 1, 6)), '%Y%m%d')) / 365) >= 20;
+FLOOR(DATEDIFF(CURDATE(), STR_TO_DATE(CONCAT('19', substring(STUDENT_SSN,1,6)), '%Y%m%d');
+
+-- 6.2020년 크리스마스는 무슨 요일이었는가?
+SELECT
+ DAYNAME('2020-12-25') as 요일 ;
+ 
+ -- 7.STR_TO_DATE('99/10/11', '%y/%m/%d') STR_TO_DATE('49/10/11', '%y/%m/%d')은 각각 몇 년 몇 월 몇 일을 의미할까? 
+ select
+ STR_TO_DATE('99/10/11', '%y/%m/%d') a,
+ STR_TO_DATE('49/10/11', '%y/%m/%d') b,
+ STR_TO_DATE('70/10/11', '%y/%m/%d') c,
+ STR_TO_DATE('69/10/11', '%y/%m/%d') d;
+ 
+-- 8.학번이 A517178 인 한아름 학생의 학점 총 평점을 구하는 SQL 문을 작성하시오. 
+-- 단, 이때 출력 화면의 헤더는 "평점" 이라고 찍히게 하고, 점수는 반올림하여 소수점 이하 한자리까지만 표시한다.
+-- ROUND: 반올림값 반환
+select
+s.STUDENT_NO as 번호,
+s.STUDENT_NAME as 이름,
+round(avg(point),1) as 평점
+from
+tb_grade g
+join
+tb_student s
+on
+(s.STUDENT_NO = g.STUDENT_NO)
+where
+s.STUDENT_NO = 'A517178' AND s.STUDENT_NAME = '한아름';
+
+-- 9.학과별 학생수를 구하여 "학과번호", "학생수(명)" 의 형태로 헤더를 만들어 결과값이 출력되도록 하시오.
+-- count() 함수 : 특정 열 또는 행의 수를 반환하는 데 사용
+-- 주로 특정 조건을 충족하는 행의 수를 세는 데 사용한다.
+select
+d.DEPARTMENT_NO AS 학과번호,
+count(*) AS 학생수
+from
+tb_department d
+join
+tb_student s
+on
+d.DEPARTMENT_NO = s.DEPARTMENT_NO
+group by
+s.DEPARTMENT_NO;
+
+-- 10.지도 교수를 배정받지 못한 학생의 수는 몇 명 정도 되는 알아내는 SQL 문을 작성하시오.
+select
+COACH_PROFESSOR_NO,
+count(*)
+from
+tb_student
+group by
+COACH_PROFESSOR_NO
+having
+COACH_PROFESSOR_NO is null;
+
+-- 11.학번이 A112113 인 김고운 학생의 년도 별 평점을 구하는 SQL 문을 작성하시오. 
+-- 단, 이때 출력 화면의 헤더는 "년도", "년도 별 평점" 이라고 찍히게 하고, 점수는 반올림하여 소수점 이하 한자리까지만 표시한다.
+select
+substring(TERM_NO,1,4) as 년도,
+round(AVG(POINT),1)  as 년도별평점
+from
+tb_grade
+where
+STUDENT_NO = 'A112113'
+group by
+substring(TERM_NO,1,4);
+
+-- 12.학과 별 휴학생 수를 파악하고자 한다. 학과 번호와 휴학생 수를 표시하는 SQL 문장을 작성하시오.
+select
+DEPARTMENT_NO as '학과번호',
+count(case when ABSENCE_YN = 'Y' THEN 1
+else null end) as '휴학생의 수'
+from
+tb_student
+group by
+DEPARTMENT_NO;
+
+-- 13. 춘 대학교에 다니는 동명이인(同名異人) 학생들의 이름을 찾고자 한다.
+-- 어떤 SQL 문장을 사용하면 가능하겠는가?
+select
+STUDENT_NAME as 이름,
+count(*) as '동명이인 수'
+from
+tb_student
+group by
+STUDENT_NAME
+having
+count(STUDENT_NAME) > 1;
+
+
 
 
 
